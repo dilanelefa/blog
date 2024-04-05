@@ -27,9 +27,9 @@ load_dotenv(BASE_DIR/'blog/.env')
 SECRET_KEY = 'django-insecure-7s4sdo&r^dd=nzc7zc5&bcqu^enggfiv+qr&^3mg$%3_#$6=)3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["blog-test-wa18.onrender.com"]
 
 # Application definition
 
