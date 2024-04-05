@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if title %} {{title}} {% else %} Blog {% endif %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static "blog_app/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "blog_app/css/bootstrap-utilities.min.css" %}">
+    {% block style %}{% endblock %}
+
+    <link rel="stylesheet" href="{% static "blog_app/css/style.css" %}">
+    <style>
+        #single-content img{
+            width: 100%;
+            object-fit: cover;
+            box-shadow: var(--bs-box-shadow);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex h3 text-success fw-bold align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+            Blog.
+            </a>
+    
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
+              <li><a href="{% url 'blog.index' %}" class="nav-link px-2 link-success">Blog</a></li>
+              <li><a href="" class="nav-link px-2 link-body-emphasis">Contact</a></li>
+            </ul>
+    
+            <form method="GET" action="{% url 'blog.index'  %}" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+              <input type="search" class="form-control" name="query" value="" placeholder="Search..." aria-label="Search">
+            </form>
+    
+            {%if user.is_authenticated %}
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="rounded-circle object-fit-cover" width="32" height="32" src="{% if post.author.photo %}  {% else %} {% static 'blog_app/images/user.png' %} {% endif %}" alt="user-photo">
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                         <li><a class="dropdown-item" href="{% url 'dashboard.index' %}">Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><form class="dropdown-item" action="{% url "logout" %}"  method="post">
+                          {% csrf_token %}
+                          <button class="nav-link">Log out</button>
+                        </form></li>
+                    </ul>
+                </div>
+            {%else%}
+                <div class="text-end">
+                    <a href="{% url "login" %}" class="btn btn-outline-success me-2">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-success">Register</a>
+                </div>
+            {%endif%}
+          </div>
+        </div>
+      </header>
+    {% block content %}{% endblock content %}
+    <footer class="d-flex flex-wrap justify-content-between align-items-center px-5 py-3 mt-3 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-body-success text-decoration-none lh-1">
+            Blog.
+          </a>
+          <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2024 Company, Inc</span>
+        </div>
+
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3"><a class="text-body-secondary" href="#"><i class="bi bi-google"></i></a></li>
+          <li class="ms-3"><a class="text-body-secondary" href="#"><i class="bi bi-twitter-x"></i></a></li>
+          <li class="ms-3"><a class="text-body-secondary" href="#"><i class="bi bi-facebook"></i></a></li>
+        </ul>
+    </footer>
+    <script src="{% static 'blog_app/js/bootstrap.bundle.min.js' %}"></script>
+
+    {% block script %}{% endblock script %}
+</body>
+</html>

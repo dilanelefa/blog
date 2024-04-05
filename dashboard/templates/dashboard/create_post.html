@@ -1,0 +1,83 @@
+{% extends 'dashboard/base.html' %}
+{% block style %}
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-column mx-4" style="margin-top: 13vh">
+        <nav aria-label="breadcrumb mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'post.index' %}">Post</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+
+        <h1 class="h3">Create Post Form</h1>
+
+        <form action="" method="post" enctype="multipart/form-data" id="form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title">Title</label>
+                <input type="text" id="title" value="{{ form.cleaned_data.title }}" name="title" class="form-control {% if form.title.errors %} is-invalid {% endif %}" placeholder="title">
+                 {% if form.title.errors %} <span class="invalid-feedback">{{ form.title.errors }}</span> {% endif %}
+            </div>
+             <div class="mb-3">
+                 <label for="description">Description</label>
+                 <input type="text" id="description" value="{{ form.cleaned_data.description }}" name="description" class="form-control {% if form.description.errors %} is-invalid {% endif %}" placeholder="lorem...">
+                 {% if form.description.errors %} <span class="invalid-feedback">{{ form.description.errors }}</span> {% endif %}
+            </div>
+
+             <div class="mb-2">
+                <label for="thumbnail">Thumbnail</label>
+                <input type="file" id="thumbnail" value="{{ form.cleaned_data.thumbnail }}" name="thumbnail" class="form-control {% if form.thumbnail.errors %} is-invalid {% endif %}">
+             </div>
+
+            <div class="mb-3">
+                <label for="content">Content</label>
+                <textarea name="content" id="content" rows="10" class="form-control">{{ form.cleaned_data.content }}</textarea>
+            </div>
+            <div class="d-flex gap-2 pb-3 justify-content-end">
+                <button type="reset" class="btn btn-secondary">Discard</button>
+                <button type="submit" class="btn btn-success">Create</button>
+            </div>
+        </form>
+
+
+    </div>
+
+{% endblock content %}
+
+{% block script %}
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+    <script>
+        const textarea = document.querySelector("#content")
+        const easyMDE = new EasyMDE({
+            element: textarea,
+            onToggleFullScreen: false,
+            previewImagesInEditor: true,
+            sideBySideFullscreen: false,
+            initialValue: textarea.value,
+            toolbar: ["bold", "italic", {
+                    name: "heading",
+                    className: "fa fa-header",
+                    title: "heading buttons",
+                    children: [ "heading-1","heading-2","heading-3"]
+                }, "|", "quote", "code","unordered-list", "ordered-list", "|", "link", "image", {
+                    name: "upload-image",
+                    action: EasyMDE.drawUploadedImage,
+                    className: "fa fa-upload",
+                    title: "Bold",
+                }, "|", "preview"
+            ],
+            uploadImage: true,
+            imageUploadEndpoint: "{% url 'image_upload' %}",
+            imagePathAbsolute: false
+        })
+
+        document.querySelector("#form").addEventListener('submit', (event)=>{
+            event.target.document.querySelector("#content").value = easyMDE.value()
+        })
+
+
+    </script>
+{% endblock script %}

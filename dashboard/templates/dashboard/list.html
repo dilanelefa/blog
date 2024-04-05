@@ -1,0 +1,57 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block content %}
+
+    <div class="d-flex flex-column mx-4" style="margin-top: 13vh">
+       <nav aria-label="breadcrumb mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Post</a></li>
+                <li class="breadcrumb-item active" aria-current="page">List</li>
+            </ol>
+       </nav>
+
+        <div class="d-flex justify-content-between mb-3">
+            <h3>List of posts</h3>
+            <div class="d-flex align-items-center">
+                <form method="GET" action="{% url 'blog.index'  %}" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                  <input type="search" class="form-control" name="query" value="" placeholder="Search..." aria-label="Search">
+                </form>
+                <a href="{% url 'post.create' %}" class="btn btn-success">Create post</a>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Publish Date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td scope="row">{{ post.pk }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.description }}</td>
+                        <td>{{ post.create_at.date }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <i href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu text-small shadow">
+                                     <li><a class="dropdown-item" href="{% url 'profile' %}">Edite</a></li>
+                                     <li><a class="dropdown-item" href="{% url 'dashboard.index' %}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock content %}
